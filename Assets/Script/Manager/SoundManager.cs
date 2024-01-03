@@ -6,5 +6,6 @@ public class SoundManager : Singleton<SoundManager>
 {
     private void Start()
     {
+
     }
 }
