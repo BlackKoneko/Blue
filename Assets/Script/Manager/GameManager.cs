@@ -12,7 +12,10 @@ public class GameManager : Singleton<GameManager>
 
     private void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            
+        }
     }
 
     public void MissionSelection()

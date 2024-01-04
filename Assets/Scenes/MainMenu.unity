@@ -3202,7 +3202,7 @@ GameObject:
   - component: {fileID: 1750114878}
   - component: {fileID: 1750114877}
   m_Layer: 0
-  m_Name: ObjectPoolManager
+  m_Name: ObjectPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3220,14 +3220,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da610c09db5fb9f44b78590a62c367f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  missionTiles:
-  - {fileID: 9215556328314856900, guid: ba2d5f6b1c38eda48ab4ee377a940568, type: 3}
   Enemy:
   - {fileID: 328409505970683906, guid: 464cc7c4f7ea10b47a36d7848aa9ca9a, type: 3}
   - {fileID: 9187343066701982198, guid: 4198e2587d1fcca4cb87c16c3cfed34d, type: 3}
-  Tiles: []
-  unit01: []
-  unit02: []
 --- !u!4 &1750114878
 Transform:
   m_ObjectHideFlags: 0
