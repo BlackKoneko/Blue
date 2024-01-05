@@ -15,13 +15,25 @@ public class UIManager : Singleton<UIManager>
     [Header("타일맵 UI")]
     public GameObject tileMapCanvas;
     [Header("캐릭터 선택창 버튼")]
+    public Button[] charSelectButtons;
+    [Header("캐릭터 버튼")]
     public Button[] charButtons;
 
-    private void Awake()
+    protected override void Awake()
     {
-        //for(int i = 0; i < charButtons.Length; i++)
-        //    charButtons[0].onClick.AddListener(()=> charCanvas.SetActive(true));
+        base.Awake();
+        for(int i = 0; i < charButtons.Length; i++)
+            charButtons[0].onClick.AddListener(()=> charCanvas.SetActive(true));
+        for(int i = 0;i < charSelectButtons.Length;i++)
+        {
+            charSelectButtons[i].onClick.AddListener(() => CharInfoAdd(i));
+        }
     }
+    public void CharInfoAdd(int value)
+    {
+        GameManager.instance.playerCharacter[0] = value;
+    }
+    
     //메인 화면 관련
     public void MainStart()
     {
@@ -54,8 +66,6 @@ public class UIManager : Singleton<UIManager>
     }
     public void CharacterSelect()
     {
-        Debug.Log(charSelectCanvas.name);
-        Debug.Log(tileMapCanvas.name);
         charSelectCanvas.SetActive(true);
         tileMapCanvas.SetActive(false);
     }
