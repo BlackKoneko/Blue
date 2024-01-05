@@ -4,16 +4,10 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour, IHitable, IAttackable
 {
-    public virtual float Hp { get ; set ; }
-    public virtual float Atk { get ; set ; }
+    public abstract float Hp { get ; set ; }
+    public abstract float Atk { get ; set ; }
 
-    void IAttackable.Attack(IHitable target)
-    {
-        throw new System.NotImplementedException();
-    }
+    public abstract void Attack(IHitable target);
 
-    void IHitable.Hit(IAttackable attacker)
-    {
-        throw new System.NotImplementedException();
-    }
+    public abstract void Hit(IAttackable attacker);
 }

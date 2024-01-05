@@ -460,5 +460,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mission1Tile
       objectReference: {fileID: 0}
+    - target: {fileID: 9215556328314856900, guid: ba2d5f6b1c38eda48ab4ee377a940568, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba2d5f6b1c38eda48ab4ee377a940568, type: 3}

@@ -6,7 +6,10 @@ public class ObjectPool : MonoBehaviour
 {
     [Header("프리팹")]
     public GameObject[] gameObjects;
-    Dictionary<int, Stack<GameObject>> objectPoolDic;   
+    [Header("복제할 갯수")]
+    public int instanceNum; // 복제할 갯수
+
+    Dictionary<int, Stack<GameObject>> objectPoolDic; //오브젝트 풀 사전  
 
     private void Awake()
     {
@@ -20,14 +23,12 @@ public class ObjectPool : MonoBehaviour
         for(int i  = 0; i < gameObjects.Length; i++)
         {
             objectPoolDic.Add(i , new Stack<GameObject>());
-            for(int j = 0; j < 5; j++)
-                AddPool(gameObjects[i], i);
+            AddPool(gameObjects[i], i);
         }
     }
-
     public void AddPool(GameObject gameObject , int objIndex = 0)
     {
-        for(int i = 0; i < 5; i++) 
+        for(int i = 0; i < instanceNum; i++) 
         {
             GameObject setGameObj = Instantiate(gameObject);
             setGameObj.transform.SetParent(transform);
@@ -49,5 +50,5 @@ public class ObjectPool : MonoBehaviour
         objectPoolDic[objIndex].Push(gameObj);
         gameObj.SetActive(false);
     }
-    
+   
 }
