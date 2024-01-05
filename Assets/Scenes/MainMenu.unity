@@ -1947,6 +1947,15 @@ MonoBehaviour:
   charSelectCanvas: {fileID: 623755595}
   charCanvas: {fileID: 1022750286}
   tileMapCanvas: {fileID: 683676214}
+  charSelectButtons:
+  - {fileID: 674217535}
+  - {fileID: 1366375895}
+  - {fileID: 943597520}
+  - {fileID: 2145172914}
+  - {fileID: 1875321991}
+  - {fileID: 1632700675}
+  - {fileID: 1513735414}
+  - {fileID: 2053041679}
   charButtons:
   - {fileID: 1538282887}
   - {fileID: 236771239}

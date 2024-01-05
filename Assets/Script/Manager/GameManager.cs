@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
     [Header("캐릭터 정보")]
-    public int[] playerCharacter = new int[3];
+    public int[] playerCharacter = new int[4];
     [Header("게임 시작")]
     public bool gameStartBool = false;
     [Header("미션 타일")]
