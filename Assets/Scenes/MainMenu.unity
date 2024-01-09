@@ -1971,6 +1971,11 @@ MonoBehaviour:
   - {fileID: 236771239}
   - {fileID: 627386184}
   - {fileID: 1964436315}
+  charSprites:
+  - {fileID: 1538282888}
+  - {fileID: 236771240}
+  - {fileID: 627386185}
+  - {fileID: 1964436316}
   charSprite:
   - {fileID: 21300000, guid: 9d986f49ce6cd534192f14632e916df7, type: 3}
   - {fileID: 21300000, guid: be7633cc187ae604cb9808ff3c897195, type: 3}
@@ -5378,6 +5383,7 @@ MonoBehaviour:
   gameStartBool: 0
   missionTile: {fileID: 1393152645}
   enemyOP: {fileID: 1750114877}
+  startPoint: {fileID: 0}
 --- !u!4 &991557655
 Transform:
   m_ObjectHideFlags: 0

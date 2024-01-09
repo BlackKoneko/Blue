@@ -21,9 +21,6 @@ public class Enemy : Character
 
     public override float Atk { get { return atk; } set { atk = value; } }
 
-
-
-
     public override void Attack(IHitable target)
     {
         target.Hp -= Atk;
@@ -33,4 +30,6 @@ public class Enemy : Character
     {
         Hp -= attacker.Atk;
     }
+
+
 }

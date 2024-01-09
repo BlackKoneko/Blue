@@ -21,10 +21,13 @@ public class UIManager : Singleton<UIManager>
     public Button[] charSelectedButtons;
     [Header("캐릭터 버튼")]
     public Button[] charButtons;
+    public Image[] charSprites;
     [Header("캐릭터 초상화")]
     public Sprite[] charSprite;
     public Dictionary<int, Sprite> charIMagesDic;
 
+
+    private GameObject playerObj;
     protected override void Awake()
     {
         base.Awake();
@@ -48,18 +51,19 @@ public class UIManager : Singleton<UIManager>
     {
         for(int i = 0; i < charSelectSprite.Length; i++)
         {
-            if (GameManager.instance.playerCharacter[i] != 0)
+            if (GameManager.instance.playerCharacter[i] != 0) // 고른 캐릭터가 있다면 
             {
                 for(int j= 0; j< charSelectSprite.Length; j++)
                 {
-                    if (GameManager.instance.playerCharacter[i] == value)
+                    if (GameManager.instance.playerCharacter[j] == value +1) // 고른 캐릭터랑 같은게 있다면 리턴
                         return;
                 }          
             }
-            if (GameManager.instance.playerCharacter[i] == 0)
+            else
             {
                 charSelectSprite[i].sprite = charIMagesDic[value];
-                GameManager.instance.playerCharacter[i] = i+1;
+                charSprites[i].sprite = charIMagesDic[value];
+                GameManager.instance.playerCharacter[i] = value + 1;
                 return;
             }
         }
@@ -67,6 +71,7 @@ public class UIManager : Singleton<UIManager>
     public void CharInfoRemove(int value)
     {
         charSelectSprite[value].sprite = null;
+        charSprites[value].sprite = null;   
         GameManager.instance.playerCharacter[value] = 0;
     }
 
@@ -109,6 +114,16 @@ public class UIManager : Singleton<UIManager>
     {
         charSelectCanvas.SetActive(false);
         tileMapCanvas.SetActive(true);
+        if (GameManager.instance.playerCharacter[0] != 0)
+        {
+            playerObj = GameManager.instance.enemyOP.Pop(0);
+            Transform startTransform = GameManager.instance.startPoint.transform;
+            playerObj.transform.position = startTransform.position;
+        }
+        else
+        {
+            GameManager.instance.enemyOP.Return(playerObj,0);
+        }
     }
 
     public void CharacterSelectSlotClose()

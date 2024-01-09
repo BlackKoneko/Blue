@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     public ObjectPool missionTile;
     [Header("적 오브젝트 풀")]
     public ObjectPool enemyOP;
-
+    [Header("플레이어 소환 지점")]
+    public GameObject startPoint;
  
 }

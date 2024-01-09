@@ -36,7 +36,7 @@ public class ObjectPool : MonoBehaviour
             objectPoolDic[objIndex].Push(setGameObj);
         }
     }
-    public void Pop(int objIndex)
+    public GameObject Pop(int objIndex)
     {
         if (objectPoolDic[objIndex].Count <= 0)  
         {
@@ -44,9 +44,12 @@ public class ObjectPool : MonoBehaviour
         }
         GameObject enemyGameObj = objectPoolDic[objIndex].Pop();
         enemyGameObj.SetActive(true);
+        return enemyGameObj;
     }
     public void Return(GameObject gameObj, int objIndex = 0)
     {
+        if (gameObject == null)
+            return;
         objectPoolDic[objIndex].Push(gameObj);
         gameObj.SetActive(false);
     }

@@ -21,7 +21,8 @@ public class MissionTile : MonoBehaviour
         {
             if(hit.transform.gameObject.name == "StartTile" && GameManager.instance.gameStartBool == false)
             {
-                UIManager.instance.CharacterSelect();  // 왜 안들어가지는 모르겠다.
+                GameManager.instance.startPoint = hit.transform.gameObject;
+                UIManager.instance.CharacterSelect();  
             }
         }
     }
