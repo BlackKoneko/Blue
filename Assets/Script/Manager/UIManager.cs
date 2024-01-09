@@ -1,6 +1,8 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +28,6 @@ public class UIManager : Singleton<UIManager>
     public Sprite[] charSprite;
     public Dictionary<int, Sprite> charIMagesDic;
 
-
     private GameObject playerObj;
     protected override void Awake()
     {
@@ -36,7 +37,7 @@ public class UIManager : Singleton<UIManager>
             charButtons[i].onClick.AddListener(()=> charSlotCanvas.SetActive(true));
         for(int i = 0;i < charSelectButtons.Length;i++)
         {
-            int num = i;
+            int num = i; 
             charSelectButtons[i].onClick.AddListener(() => CharInfoAdd(num));
         }
         for(int i = 0;i < charSprite.Length; i++)
@@ -84,6 +85,7 @@ public class UIManager : Singleton<UIManager>
 
     public void MainSetting()
     {
+        
         
     }
 
