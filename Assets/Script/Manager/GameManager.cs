@@ -18,6 +18,7 @@ public class GameManager : Singleton<GameManager>
     }
     [Header("캐릭터 정보")]
     public int[] playerCharacter;
+    public GameObject playerObj;
     [Header("게임 시작")]
     public bool gameStartBool = false;
     [Header("미션 타일")]
@@ -25,6 +26,6 @@ public class GameManager : Singleton<GameManager>
     [Header("적 오브젝트 풀")]
     public ObjectPool enemyOP;
     [Header("플레이어 소환 지점")]
-    public GameObject startPoint;
+    public Tile startPoint;
  
 }

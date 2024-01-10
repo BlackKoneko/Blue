@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public int value;
-    public List<Edge> egdesInNode;
-    public Tile(int value)
+    public enum TileType
     {
-        this.value = value;
-        egdesInNode = new List<Edge>();
+        NONE,
+        START,
+    }
+    public TileType tileType;
+    public int value;
+    public TileNode tileNode;
+
+    private void Awake()
+    {
+        tileNode = new TileNode(value);
     }
 }

@@ -48,7 +48,7 @@ public class ObjectPool : MonoBehaviour
     }
     public void Return(GameObject gameObj, int objIndex = 0)
     {
-        if (gameObject == null)
+        if (gameObj == null)
             return;
         objectPoolDic[objIndex].Push(gameObj);
         gameObj.SetActive(false);

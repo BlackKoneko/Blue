@@ -290,6 +290,7 @@ MonoBehaviour:
   TileLayer:
     serializedVersion: 2
     m_Bits: 64
+  plObj: {fileID: 0}
 --- !u!1001 &2922123702312122646
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -575,6 +576,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2864310338799382751, guid: 45bae768bcfa069478e86c24ebc9df05, type: 3}
       propertyPath: value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2864310338799382751, guid: 45bae768bcfa069478e86c24ebc9df05, type: 3}
+      propertyPath: tileType
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

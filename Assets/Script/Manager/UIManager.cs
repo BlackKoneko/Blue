@@ -28,7 +28,6 @@ public class UIManager : Singleton<UIManager>
     public Sprite[] charSprite;
     public Dictionary<int, Sprite> charIMagesDic;
 
-    private GameObject playerObj;
     protected override void Awake()
     {
         base.Awake();
@@ -118,13 +117,13 @@ public class UIManager : Singleton<UIManager>
         tileMapCanvas.SetActive(true);
         if (GameManager.instance.playerCharacter[0] != 0)
         {
-            playerObj = GameManager.instance.enemyOP.Pop(0);
+            GameManager.instance.playerObj = GameManager.instance.enemyOP.Pop(0);
             Transform startTransform = GameManager.instance.startPoint.transform;
-            playerObj.transform.position = startTransform.position;
+            GameManager.instance.playerObj.transform.position = startTransform.position;
         }
         else
         {
-            GameManager.instance.enemyOP.Return(playerObj,0);
+            GameManager.instance.enemyOP.Return(GameManager.instance.playerObj,0);
         }
     }
 
@@ -135,7 +134,8 @@ public class UIManager : Singleton<UIManager>
     }
     public void TileMapStart()
     {
-        GameManager.instance.gameStartBool = true;
+        if(GameManager.instance.playerObj != null)
+            GameManager.instance.gameStartBool = true;
     }
 
 }

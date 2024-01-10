@@ -5,13 +5,24 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
+
+public class TileNode
+{
+    public int value;
+    public List<Edge> egdesInNode;
+    public TileNode(int value)
+    {
+        this.value = value;
+        egdesInNode = new List<Edge>();
+    }
+}
 public class Edge : IComparable<Edge>
 {
-    public Tile sNode;
-    public Tile eNode;
+    public TileNode sNode;
+    public TileNode eNode;
     public int cost;
 
-    public Edge(Tile sNode, Tile eNode, int cost)
+    public Edge(TileNode sNode, TileNode eNode, int cost)
     {
         this.sNode = sNode;
         this.eNode = eNode;
@@ -30,34 +41,38 @@ public class Edge : IComparable<Edge>
 }
 public class Graph
 {
-    public List<Tile> nodeList;
+    public List<TileNode> nodeList;
     public List<Edge> edgeList;
-    public Dictionary<Tile, bool> hasNodeChecDic;
+    public Dictionary<TileNode, bool> hasNodeChecDic;
 
     public Graph()
     {
-        nodeList = new List<Tile>();
+        nodeList = new List<TileNode>();
         edgeList = new List<Edge>();
-        hasNodeChecDic = new Dictionary<Tile, bool>();
+        hasNodeChecDic = new Dictionary<TileNode, bool>();
     }
 
-    public void AddEdge(Tile sNode, Tile eNode, int cost)
+    public void AddEdge(TileNode sNode, TileNode eNode, int cost)
     {
         TryAddNode(sNode);
         TryAddNode(eNode);
 
-        Edge newEdge = new Edge(sNode, eNode, cost);
+        Edge newSEdge = new Edge(sNode, eNode, cost);
+        Edge newEEdge = new Edge(eNode, sNode, cost);
 
-        edgeList.Add(newEdge);
-        sNode.egdesInNode.Add(newEdge);
+        edgeList.Add(newSEdge);
+        edgeList.Add(newEEdge);
+        
+
+        sNode.egdesInNode.Add(newSEdge);
+        eNode.egdesInNode.Add(newEEdge);
     }
     public void AddEdge(Edge edge)
     {
         AddEdge(edge.sNode, edge.eNode, edge.cost);
-        AddEdge(edge.eNode, edge.sNode, edge.cost);
     }
 
-    bool TryAddNode(Tile node)
+    bool TryAddNode(TileNode node)
     {
         if (hasNodeChecDic.ContainsKey(node) == false)
         {
@@ -73,29 +88,34 @@ public class MissionTile : MonoBehaviour
 {
     public Tile[] moveTile;
     public LayerMask TileLayer;
-    public Graph graph1;
-    public Graph graph2;
-    public Graph graph3;
-    public Graph graph4;
-    public Dictionary<int, Tile> tileNodeDic;
-    public Dictionary<int, Graph> missionDic;
+    public Graph graph;
+    public Dictionary<int, TileNode> tileNodeDic;
     public GameObject plObj;
 
-    private void Awake()
+    private void Start()
     {
-        graph1 = new Graph();
-        tileNodeDic = new Dictionary<int, Tile>();
-        missionDic = new Dictionary<int, Graph>();
-        tileNodeDic.Add(1, moveTile[0]);
-        tileNodeDic.Add(2, moveTile[1]);
-        tileNodeDic.Add(3, moveTile[2]);
-        graph1.AddEdge(tileNodeDic[1], tileNodeDic[2], 1);
-        graph1.AddEdge(tileNodeDic[2], tileNodeDic[3], 1);
+        graph = new Graph();
+        tileNodeDic = new Dictionary<int, TileNode>();
+        Debug.Log(GameManager.instance.MissionNum);
+        switch(GameManager.instance.MissionNum)
+        {
+            case 1:
+                tileNodeDic.Add(1, moveTile[0].tileNode);
+                tileNodeDic.Add(2, moveTile[1].tileNode);
+                tileNodeDic.Add(3, moveTile[2].tileNode);
+                graph.AddEdge(tileNodeDic[1], tileNodeDic[2], 1);
+                graph.AddEdge(tileNodeDic[2], tileNodeDic[3], 1);
+                break;
+            case 2:
+                break;
+        }
+ 
     }
+
+
 
     private void Update()
     {
-        
         if (Input.GetKeyDown(KeyCode.Mouse0))
             OnMouseDown();
     }
@@ -106,24 +126,29 @@ public class MissionTile : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, TileLayer))
         {
-            if(hit.transform.gameObject.name == "StartTile" && GameManager.instance.gameStartBool == false)
+            if (hit.transform.TryGetComponent(out Tile tile))
             {
-                GameManager.instance.startPoint = hit.transform.gameObject;
-                UIManager.instance.CharacterSelect();  
+                if(tile.tileType == Tile.TileType.START)
+                {
+                    GameManager.instance.startPoint = tile;
+                    UIManager.instance.CharacterSelect();
+                }
             }
-            if(GameManager.instance.gameStartBool == true)
+            else if (GameManager.instance.gameStartBool)
             {
-                if(hit.transform.TryGetComponent(out Enemy enemy))
-                {
-                    plObj = enemy.gameObject;
-                }
-                else if(hit.transform.TryGetComponent(out Tile tile))
-                {
-                    
-                }
+
             }
         }
     }
-    
+    public List<Edge> MoveAble(int plPoint)
+    {
+        List<Edge> edesList = new List<Edge>();
+        foreach (Edge edge in graph.nodeList[plPoint].egdesInNode)
+        {
+            edesList.Add(edge);
+            Debug.Log(edge.eNode.value);
+        }
+        return edesList;
+    }
 
 }
