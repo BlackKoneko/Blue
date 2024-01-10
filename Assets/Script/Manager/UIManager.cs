@@ -16,7 +16,9 @@ public class UIManager : Singleton<UIManager>
     public GameObject charSelectCanvas;
     public GameObject charSlotCanvas;
     [Header("타일맵 UI")]
-    public GameObject tileMapCanvas;
+    public GameObject tileMapCanvas; // 타일맵에 진입시 캔버스 
+    public Button startButton;
+    public Button nextTurnButton; //다음 턴 버튼
     [Header("캐릭터 선택창 버튼")]
     public Button[] charSelectButtons;
     public Image[] charSelectSprite;
@@ -27,7 +29,7 @@ public class UIManager : Singleton<UIManager>
     [Header("캐릭터 초상화")]
     public Sprite[] charSprite;
     public Dictionary<int, Sprite> charIMagesDic;
-
+ 
     protected override void Awake()
     {
         base.Awake();
@@ -46,6 +48,11 @@ public class UIManager : Singleton<UIManager>
             int num = i;
             charSelectedButtons[i].onClick.AddListener(() => CharInfoRemove(num));
         }
+        startButton.onClick.AddListener(() =>
+        {
+            if (GameManager.instance.playerObj != null)
+                GameManager.instance.gameStartBool = true;
+        });
     }
     public void CharInfoAdd(int value)
     {
@@ -71,7 +78,7 @@ public class UIManager : Singleton<UIManager>
     public void CharInfoRemove(int value)
     {
         charSelectSprite[value].sprite = null;
-        charSprites[value].sprite = null;   
+        charSprites[value].sprite = null;
         GameManager.instance.playerCharacter[value] = 0;
     }
 
@@ -84,7 +91,7 @@ public class UIManager : Singleton<UIManager>
 
     public void MainSetting()
     {
-        
+        //사운드 관련 세팅 을 넣을 예정
         
     }
 
@@ -131,11 +138,6 @@ public class UIManager : Singleton<UIManager>
     {
         charSlotCanvas.SetActive(false);
         charSelectCanvas.SetActive(true);
-    }
-    public void TileMapStart()
-    {
-        if(GameManager.instance.playerObj != null)
-            GameManager.instance.gameStartBool = true;
     }
 
 }

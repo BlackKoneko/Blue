@@ -11,6 +11,7 @@ public class Tile : MonoBehaviour
     }
     public TileType tileType;
     public int value;
+    public bool moveable;
     public TileNode tileNode;
 
     private void Awake()

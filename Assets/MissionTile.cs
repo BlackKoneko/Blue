@@ -63,7 +63,6 @@ public class Graph
         edgeList.Add(newSEdge);
         edgeList.Add(newEEdge);
         
-
         sNode.egdesInNode.Add(newSEdge);
         eNode.egdesInNode.Add(newEEdge);
     }
@@ -109,18 +108,15 @@ public class MissionTile : MonoBehaviour
             case 2:
                 break;
         }
- 
     }
-
-
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
-            OnMouseDown();
+            MouseClick();
     }
 
-    public void OnMouseDown()
+    public void MouseClick()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -128,19 +124,24 @@ public class MissionTile : MonoBehaviour
         {
             if (hit.transform.TryGetComponent(out Tile tile))
             {
-                if(tile.tileType == Tile.TileType.START)
+                if(!GameManager.instance.gameStartBool && tile.tileType == Tile.TileType.START)
                 {
                     GameManager.instance.startPoint = tile;
                     UIManager.instance.CharacterSelect();
                 }
-            }
-            else if (GameManager.instance.gameStartBool)
-            {
-
+                else
+                {
+                    
+                }
             }
         }
     }
-    public List<Edge> MoveAble(int plPoint)
+    /// <summary>
+    /// 플레이어가 갈 수 있는 간선을 가져오는 함수
+    /// </summary>
+    /// <param name="plPoint"> 플레이어가 서있는 타일</param>
+    /// <returns></returns>
+    public List<Edge> GetEdgeList(int plPoint)
     {
         List<Edge> edesList = new List<Edge>();
         foreach (Edge edge in graph.nodeList[plPoint].egdesInNode)
@@ -149,6 +150,18 @@ public class MissionTile : MonoBehaviour
             Debug.Log(edge.eNode.value);
         }
         return edesList;
+    }
+
+    /// <summary>
+    /// 이동 가능한 타일에 bool값을 true로 변경해줌. - 플레이어가 인접 타일로 한칸 이동하기 위해서 구현.
+    /// </summary>
+    public void SetMoveTile()
+    {
+        List<Edge> list = GetEdgeList(GameManager.instance.startPoint.value);
+        for (int i = 0; i<list.Count; i++)
+            moveTile[i].moveable = false;
+        for (int i = 0; i<list.Count; i++)
+            moveTile[list[i].eNode.value].moveable = true;
     }
 
 }
