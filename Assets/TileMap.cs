@@ -83,7 +83,7 @@ public class Graph
     }
 }
 
-public class MissionManager : Singleton<MissionManager>
+public class TileMap : MonoBehaviour
 {
     public Tile[] moveTile;
     public LayerMask TileLayer;
@@ -91,6 +91,11 @@ public class MissionManager : Singleton<MissionManager>
     public Dictionary<int, TileNode> tileNodeDic;
     public GameObject plObj;
 
+    private bool moveableBool;
+    private void Start()
+    {
+        SetMission();
+    }
     public void SetMission()
     {
         graph = new Graph();
@@ -107,19 +112,14 @@ public class MissionManager : Singleton<MissionManager>
             case 2:
                 break;
         }
-
-        GameManager.instance.nextTurnAction += () => { SetMoveTile(); }; //다음 턴 버튼 클릭시 이동 가능한 타일이 변경 
-
-
+        UIManager.instance.nextTurnButton.onClick.AddListener(() => { SetMoveTile(); });
+        UIManager.instance.nextTurnButton.onClick.AddListener(() => { GameManager.instance.SetMissionState(MissionState.ENEMYTURN); });
+        UIManager.instance.startButton.onClick.AddListener(() => { SetMoveTile(); });
+        GameManager.instance.StartStateUpdate += () => { SetCharacter(); };
+        GameManager.instance.MyTurnStateUpdate += () => { MoveCharacter(); };
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-            MouseClick();
-    }
-
-    public void MouseClick()
+    public void SetCharacter()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -132,14 +132,24 @@ public class MissionManager : Singleton<MissionManager>
                     GameManager.instance.plPoint = tile;
                     UIManager.instance.CharacterSelect();
                 }
-                else
+            }
+        }
+    }
+
+    public void MoveCharacter()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, TileLayer))
+        {
+            if (hit.transform.TryGetComponent(out Tile tile))
+            {
+                if (tile.moveable && moveableBool)
                 {
-                    if(tile.moveable)
-                    {
-                        GameManager.instance.plPoint = tile;
-                        plObj = GameManager.instance.playerObj;
-                        plObj.transform.position = tile.transform.position;
-                    }
+                    GameManager.instance.plPoint = tile;
+                    plObj = GameManager.instance.playerObj;
+                    plObj.transform.position = tile.transform.position;
+                    moveableBool = false;   
                 }
             }
         }
@@ -168,6 +178,7 @@ public class MissionManager : Singleton<MissionManager>
         List<Edge> list = GetEdgeList(GameManager.instance.plPoint.value);
         for (int i = 0; i<list.Count; i++)
             moveTile[list[i].eNode.value -1].moveable = true; //설정
+        moveableBool = true;
     }
 
 }

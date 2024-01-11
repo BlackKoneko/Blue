@@ -7,102 +7,6 @@ using UnityEditor;
 using UnityEngine;
 
 
-public interface IState
-{
-    public void Enter();
-    public void Update();
-    public void Exit();
-}
-public class MissionStateMachine
-{
-    public IState state;
-    public MissionStateMachine( IState state )
-    {
-        this.state = state;
-    }
-    public void SetState( IState state )
-    {
-        if (state == this.state)
-            return;
-        this.state.Exit();
-        this.state = state;
-        state.Enter();  
-    }
-
-    public void StateUpdate()
-    {
-        state.Update();
-    }
-
-}
-public class IdleState : IState
-{
-    public void Enter()
-    {
-        MissionManager.instance.SetMission();
-    }
-
-    public void Exit()
-    {
-        
-    }
-
-    public void Update()
-    {
-        
-    }
-}
-public class StartState : IState
-{
-    public void Enter()
-    {
-        
-    }
-
-    public void Exit()
-    {
-        
-    }
-
-    public void Update()
-    {
-        
-    }
-}
-public class MyTurnState : IState
-{
-    public void Enter()
-    {
-        
-    }
-
-    public void Exit()
-    {
-        
-    }
-
-    public void Update()
-    {
-        
-    }
-}
-public class EnemyTurnState : IState
-{
-    public void Enter()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Exit()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Update()
-    {
-        throw new NotImplementedException();
-    }
-}
 
 public enum MissionState
 {
@@ -112,9 +16,9 @@ public enum MissionState
     ENEMYTURN
 }
 
+
 public class GameManager : Singleton<GameManager>
 {
-
     [Header("미션 타일맵 선택")]
     private int missionnum;
     public int MissionNum
@@ -124,7 +28,7 @@ public class GameManager : Singleton<GameManager>
         { 
             missionnum = value;
             missionTile.Pop(MissionNum - 1);
-            missionStateMachine = new MissionStateMachine(missionStateDic[MissionState.IDLE]);
+            SetMissionState(MissionState.START);
         }
     }
     [Header("캐릭터 정보")]
@@ -140,10 +44,10 @@ public class GameManager : Singleton<GameManager>
             gameStartBool = value; 
             if(gameStartBool)
             {
-                missionStateMachine.SetState(missionStateDic[MissionState.START]);
+                SetMissionState(MissionState.MYTURN);
             }
             else
-                missionStateMachine.SetState(missionStateDic[MissionState.IDLE]);
+                SetMissionState(MissionState.START);
         }
     }
     [Header("미션 타일")]
@@ -152,14 +56,12 @@ public class GameManager : Singleton<GameManager>
     public ObjectPool enemyOP;
     [Header("플레이어 위치")]
     public Tile plPoint;
-    /// <summary>
-    /// 다음 턴으로 넘어갈때 실행할 함수
-    /// </summary>
-    public Action nextTurnAction;
-
     public MissionStateMachine missionStateMachine;
 
     public Dictionary<MissionState, IState> missionStateDic = new Dictionary<MissionState, IState>();
+
+    public Action StartStateUpdate;
+    public Action MyTurnStateUpdate;
 
     private void Start()
     {
@@ -172,6 +74,30 @@ public class GameManager : Singleton<GameManager>
         missionStateDic.Add(MissionState.START, start);
         missionStateDic.Add(MissionState.MYTURN, myTurn);
         missionStateDic.Add(MissionState.ENEMYTURN, enemyTurn);
+
+        missionStateMachine = new MissionStateMachine(idle);
     }
 
+    public void SetMissionState(MissionState missionState)
+    {
+        switch(missionState)
+        {
+            case MissionState.IDLE:
+                missionStateMachine.SetState(missionStateDic[MissionState.IDLE]);
+                break;
+            case MissionState.START:
+                missionStateMachine.SetState(missionStateDic[MissionState.START]);
+                break;
+            case MissionState.MYTURN:
+                missionStateMachine.SetState(missionStateDic[MissionState.MYTURN]);
+                break;
+            case MissionState.ENEMYTURN:
+                missionStateMachine.SetState(missionStateDic[MissionState.ENEMYTURN]);
+                break;
+        }
+    }
+    private void Update()
+    {
+        missionStateMachine.StateUpdate();
+    }
 }

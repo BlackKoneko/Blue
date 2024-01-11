@@ -56,10 +56,8 @@ public class UIManager : Singleton<UIManager>
                 GameManager.instance.GameStartBool = true;
                 startButton.gameObject.SetActive(false);
                 nextTurnButton.gameObject.SetActive(true);
-                GameManager.instance.nextTurnAction();
             }
         });
-        nextTurnButton.onClick.AddListener(() => { GameManager.instance.nextTurnAction(); });
     }
     public void CharInfoAdd(int value)
     {

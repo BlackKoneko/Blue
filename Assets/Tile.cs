@@ -19,7 +19,7 @@ public class Tile : MonoBehaviour
     {
         tileNode = new TileNode(value);
 
-        GameManager.instance.nextTurnAction += () => { moveable = false; };
+        UIManager.instance.nextTurnButton.onClick.AddListener(() => moveable = false);
         //스태틱 이면 컴파일타임에 생성 되므로 문제 없음
         //다만 스태틱 아닌경우는 생성 되는 순서가 모호해 지므로 문제 발생 가능성 있음(비추천)
     }
