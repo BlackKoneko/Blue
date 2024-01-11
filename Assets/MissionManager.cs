@@ -83,7 +83,7 @@ public class Graph
     }
 }
 
-public class MissionTile : MonoBehaviour
+public class MissionManager : Singleton<MissionManager>
 {
     public Tile[] moveTile;
     public LayerMask TileLayer;
@@ -91,11 +91,10 @@ public class MissionTile : MonoBehaviour
     public Dictionary<int, TileNode> tileNodeDic;
     public GameObject plObj;
 
-    private void Start()
+    public void SetMission()
     {
         graph = new Graph();
         tileNodeDic = new Dictionary<int, TileNode>();
-        Debug.Log(GameManager.instance.MissionNum);
         switch(GameManager.instance.MissionNum)
         {
             case 1:
@@ -108,6 +107,10 @@ public class MissionTile : MonoBehaviour
             case 2:
                 break;
         }
+
+        GameManager.instance.nextTurnAction += () => { SetMoveTile(); }; //다음 턴 버튼 클릭시 이동 가능한 타일이 변경 
+
+
     }
 
     private void Update()
@@ -124,14 +127,19 @@ public class MissionTile : MonoBehaviour
         {
             if (hit.transform.TryGetComponent(out Tile tile))
             {
-                if(!GameManager.instance.gameStartBool && tile.tileType == Tile.TileType.START)
+                if(tile.tileType == Tile.TileType.START)
                 {
-                    GameManager.instance.startPoint = tile;
+                    GameManager.instance.plPoint = tile;
                     UIManager.instance.CharacterSelect();
                 }
                 else
                 {
-                    
+                    if(tile.moveable)
+                    {
+                        GameManager.instance.plPoint = tile;
+                        plObj = GameManager.instance.playerObj;
+                        plObj.transform.position = tile.transform.position;
+                    }
                 }
             }
         }
@@ -144,10 +152,10 @@ public class MissionTile : MonoBehaviour
     public List<Edge> GetEdgeList(int plPoint)
     {
         List<Edge> edesList = new List<Edge>();
-        foreach (Edge edge in graph.nodeList[plPoint].egdesInNode)
+        foreach (Edge edge in graph.nodeList[plPoint-1].egdesInNode)
         {
             edesList.Add(edge);
-            Debug.Log(edge.eNode.value);
+            Debug.Log("이동 가능한 값"+ edge.eNode.value);
         }
         return edesList;
     }
@@ -157,11 +165,9 @@ public class MissionTile : MonoBehaviour
     /// </summary>
     public void SetMoveTile()
     {
-        List<Edge> list = GetEdgeList(GameManager.instance.startPoint.value);
+        List<Edge> list = GetEdgeList(GameManager.instance.plPoint.value);
         for (int i = 0; i<list.Count; i++)
-            moveTile[i].moveable = false;
-        for (int i = 0; i<list.Count; i++)
-            moveTile[list[i].eNode.value].moveable = true;
+            moveTile[list[i].eNode.value -1].moveable = true; //설정
     }
 
 }

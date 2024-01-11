@@ -5,13 +5,14 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class UIManager : Singleton<UIManager>
 {
     [Header("미션 UI")]
     public GameObject missionCanvas;
     [Header("메인 UI")]
-    public GameObject mainCanvas;
+    public GameObject mainCanvas; 
     [Header("캐릭터 선택")]
     public GameObject charSelectCanvas;
     public GameObject charSlotCanvas;
@@ -29,7 +30,7 @@ public class UIManager : Singleton<UIManager>
     [Header("캐릭터 초상화")]
     public Sprite[] charSprite;
     public Dictionary<int, Sprite> charIMagesDic;
- 
+    
     protected override void Awake()
     {
         base.Awake();
@@ -51,8 +52,14 @@ public class UIManager : Singleton<UIManager>
         startButton.onClick.AddListener(() =>
         {
             if (GameManager.instance.playerObj != null)
-                GameManager.instance.gameStartBool = true;
+            {
+                GameManager.instance.GameStartBool = true;
+                startButton.gameObject.SetActive(false);
+                nextTurnButton.gameObject.SetActive(true);
+                GameManager.instance.nextTurnAction();
+            }
         });
+        nextTurnButton.onClick.AddListener(() => { GameManager.instance.nextTurnAction(); });
     }
     public void CharInfoAdd(int value)
     {
@@ -125,7 +132,7 @@ public class UIManager : Singleton<UIManager>
         if (GameManager.instance.playerCharacter[0] != 0)
         {
             GameManager.instance.playerObj = GameManager.instance.enemyOP.Pop(0);
-            Transform startTransform = GameManager.instance.startPoint.transform;
+            Transform startTransform = GameManager.instance.plPoint.transform;
             GameManager.instance.playerObj.transform.position = startTransform.position;
         }
         else
