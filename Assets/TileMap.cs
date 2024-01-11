@@ -108,6 +108,7 @@ public class TileMap : MonoBehaviour
                 tileNodeDic.Add(3, moveTile[2].tileNode);
                 graph.AddEdge(tileNodeDic[1], tileNodeDic[2], 1);
                 graph.AddEdge(tileNodeDic[2], tileNodeDic[3], 1);
+                GameManager.instance.enemyOP.Pop(0).transform.position = moveTile[2].transform.position;
                 break;
             case 2:
                 break;
@@ -149,7 +150,9 @@ public class TileMap : MonoBehaviour
                     GameManager.instance.plPoint = tile;
                     plObj = GameManager.instance.playerObj;
                     plObj.transform.position = tile.transform.position;
-                    moveableBool = false;   
+                    moveableBool = false;
+                    if (tile.enemy)
+                        Debug.Log("½Î¿î´Ù");
                 }
             }
         }
@@ -175,6 +178,8 @@ public class TileMap : MonoBehaviour
     /// </summary>
     public void SetMoveTile()
     {
+        if (GameManager.instance.plPoint == null)
+            return;
         List<Edge> list = GetEdgeList(GameManager.instance.plPoint.value);
         for (int i = 0; i<list.Count; i++)
             moveTile[list[i].eNode.value -1].moveable = true; //¼³Á¤
